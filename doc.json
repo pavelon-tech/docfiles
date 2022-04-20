@@ -11,12 +11,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000",
+      "url": "https://cml-app.herokuapp.com/",
       "description": "Dev"
     },
     {
-      "url": "https://localhost:8000",
-      "description": "UAT"
+      "url": "https://localhost:8443",
+      "description": "Local"
     }
   ],
   "security": [
@@ -254,8 +254,8 @@
         "tags": [
           "Client"
         ],
-        "operationId": "Get a Client",
-        "description": "Get a Client",
+        "operationId": "View Client",
+        "description": "View Client",
         "parameters": [
           {
             "name": "clientId",
@@ -278,7 +278,7 @@
         "tags": [
           "Loans"
         ],
-        "description": "Loan Request",
+        "description": "Loan Application",
         "requestBody": {
           "required": false,
           "content": {
@@ -323,7 +323,7 @@
       }
     },
     "/api/probeLoan/{loanId}": {
-      "post": {
+      "get": {
         "tags": [
           "Loans"
         ],
@@ -342,6 +342,29 @@
         "responses": {
           "200": {
             "description": "Description"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Loan"
+        ],
+        "summary": "Approve or Reject Loan (action = approve, action = reject)",
+        "description": "Approve or Reject Loan",
+        "operationId": "Approve or Reject Loan",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionLoanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Desciption"
           }
         }
       }
@@ -477,6 +500,20 @@
         }
       },
       "VerfiyOTPResponse": {
+        "type": "object"
+      },
+      "ActionLoanRequest": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        }
+      },
+      "ActionLoanResponse": {
         "type": "object"
       },
       "DisburseRequest": {
