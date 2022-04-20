@@ -347,9 +347,9 @@
       },
       "post": {
         "tags": [
-          "Loan"
+          "Loans"
         ],
-        "summary": "Approve or Reject Loan (action = approve, action = reject)",
+        "summary": "Approve / Reject Loan (action = approve/reject)",
         "description": "Approve or Reject Loan",
         "operationId": "Approve or Reject Loan",
         "requestBody": {
