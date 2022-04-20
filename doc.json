@@ -21,7 +21,10 @@
   ],
   "security": [
     {
-      "api_key": []
+      "x-api-key": []
+    },
+    {
+      "x-api-version": []
     }
   ],
   "tags": [
@@ -32,14 +35,17 @@
       "name": "E-Verification"
     },
     {
-      "name": "Clients"
+      "name": "Domain Verification"
+    },
+    {
+      "name": "Client"
     },
     {
       "name": "Loans"
     }
   ],
   "paths": {
-    "/auth": {
+    "/api/auth/login": {
       "post": {
         "tags": [
           "Auth"
@@ -69,38 +75,7 @@
         }
       }
     },
-    "/client": {
-      "post": {
-        "tags": [
-          "Client"
-        ],
-        "operationId": "Add Client",
-        "description": "Add New Client",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Client"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Description",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/verify/id": {
+    "/api/user/verify/id": {
       "post": {
         "tags": [
           "E-Verification"
@@ -131,7 +106,7 @@
         }
       }
     },
-    "/user/otp/send": {
+    "/api/user/otp/send": {
       "post": {
         "tags": [
           "E-Verification"
@@ -162,7 +137,7 @@
         }
       }
     },
-    "/user/otp/verify": {
+    "/api/user/otp/verify": {
       "post": {
         "tags": [
           "E-Verification"
@@ -193,7 +168,112 @@
         }
       }
     },
-    "/loan": {
+    "/api/domain/verify": {
+      "post": {
+        "tags": [
+          "Domain Verification"
+        ],
+        "operationId": "Domain Verify",
+        "description": "Domain Verify",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyDomainUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/probeClient": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Add Client",
+        "description": "Add New Client",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Fetch Client",
+        "description": "Fetch Client",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/probeClient/{clientId}": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "operationId": "Get a Client",
+        "description": "Get a Client",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/probeLoan": {
       "post": {
         "tags": [
           "Loans"
@@ -221,6 +301,82 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Loans"
+        ],
+        "operationId": "Fetch Loans",
+        "description": "Fetch Loans",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/probeLoan/{loanId}": {
+      "post": {
+        "tags": [
+          "Loans"
+        ],
+        "operationId": "View Loan",
+        "description": "View Loan Application",
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/probeLoan/{loanId}/disburse": {
+      "post": {
+        "tags": [
+          "Loans"
+        ],
+        "operationId": "Disburse Loan",
+        "description": "Disburse Loan",
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisburseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response"
+          }
+        }
       }
     }
   },
@@ -232,9 +388,15 @@
           "fullname": {
             "type": "string"
           },
+          "email": {
+            "type": "string"
+          },
           "mobileNo": {
             "type": "string",
-            "maxLength": 10
+            "maximum": 10
+          },
+          "type": {
+            "type": "string"
           }
         }
       },
@@ -252,11 +414,13 @@
       "Auth": {
         "type": "object",
         "properties": {
-          "username": {
-            "type": "string"
+          "email": {
+            "type": "string",
+            "example": "testdomain@pavelon.com"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "123456"
           }
         }
       },
@@ -267,29 +431,33 @@
         "type": "object",
         "properties": {
           "country": {
-            "type": "string"
+            "type": "string",
+            "example": "gh"
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "example": "voter"
           },
           "full_name": {
             "type": "string"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "example": 2000100000
           },
           "is_new_id": {
-            "type": "boolean"
-          },
-          "VerifyIDResponse": {
-            "type": "object"
+            "type": "boolean",
+            "example": false
           }
         }
+      },
+      "VerifyIDResponse": {
+        "type": "object"
       },
       "OTPRequest": {
         "type": "object",
         "properties": {
-          "mobileNo": {
+          "mobile": {
             "type": "string"
           }
         }
@@ -300,7 +468,7 @@
       "VerifyOTP": {
         "type": "object",
         "properties": {
-          "mobileNo": {
+          "mobile": {
             "type": "string"
           },
           "code": {
@@ -309,6 +477,67 @@
         }
       },
       "VerfiyOTPResponse": {
+        "type": "object"
+      },
+      "DisburseRequest": {
+        "type": "object",
+        "properties": {
+          "transactionAmount": {
+            "type": "string"
+          },
+          "fixedEmiAmount": {
+            "type": "string"
+          },
+          "actualDisbursementDate": {
+            "type": "string"
+          },
+          "paymentTypeId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "accountNumber": {
+            "type": "string"
+          },
+          "checkNumber": {
+            "type": "string"
+          },
+          "routingCode": {
+            "type": "string"
+          },
+          "receiptNumber": {
+            "type": "string"
+          },
+          "bankNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "DisburseResponse": {
+        "type": "object"
+      },
+      "VerifyDomainUser": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string",
+            "example": "pavelon"
+          },
+          "mode": {
+            "type": "string",
+            "example": "validate"
+          },
+          "type": {
+            "type": "string",
+            "example": "identity"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "VerfiyDomainResponse": {
         "type": "object"
       },
       "Loan": {
@@ -405,9 +634,14 @@
       }
     },
     "securitySchemes": {
-      "api_key": {
+      "x-api-key": {
         "type": "apiKey",
-        "name": "api_key",
+        "name": "x-api-key",
+        "in": "header"
+      },
+      "x-api-version": {
+        "type": "apiKey",
+        "name": "x-api-version",
         "in": "header"
       },
       "basicAuth": {
