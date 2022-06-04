@@ -75,6 +75,12 @@
     },
     {
       "name": "Disbursement API"
+    },
+    {
+      "name": "Self Service"
+    },
+    {
+      "name": "Application Integration"
     }
   ],
   "paths": {
@@ -813,6 +819,132 @@
           }
         }
       }
+    },
+    "/api/domains": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "List Organization / Domain",
+        "operationId": "List Organization / Domain",
+        "description": "List Organization / Domain",
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/onboarding": {
+      "post": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Onboarding",
+        "operationId": "Onboarding",
+        "description": "Onboarding",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/creditproducts": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "List Credit Products",
+        "operationId": "List Credit Products",
+        "description": "List Credit Products",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/credit": {
+      "post": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Apply for Credit Product",
+        "operationId": "Apply for Credit Product",
+        "description": "Apply for Credit Product",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreditProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -913,6 +1045,48 @@
       },
       "VerfiyOTPResponse": {
         "type": "object"
+      },
+      "DomainResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreditProduct": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productType": {
+            "type": "integer"
+          },
+          "domainName": {
+            "type": "string"
+          },
+          "domainId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreditProductRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "string"
+          }
+        }
       },
       "ActionLoanRequest": {
         "type": "object",
@@ -1088,6 +1262,29 @@
             "type": "string"
           },
           "postalCode": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRegister": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "verified_id_name": {
+            "type": "string"
+          },
+          "verified_id_value": {
             "type": "string"
           }
         }
