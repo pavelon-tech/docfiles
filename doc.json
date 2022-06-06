@@ -1085,6 +1085,12 @@
           },
           "amount": {
             "type": "string"
+          },
+          "mandatePin": {
+            "type": "string"
+          },
+          "mandateNumber": {
+            "type": "string"
           }
         }
       },
@@ -1276,6 +1282,12 @@
             "type": "string"
           },
           "organization_id": {
+            "type": "string"
+          },
+          "selfieUrl": {
+            "type": "string"
+          },
+          "idCardUrl": {
             "type": "string"
           },
           "mobileNo": {
