@@ -1,970 +1,1543 @@
-openapi: 3.0.1
-info:
-  title: Pavelon
-  description: Pavelon's API is organized around REST and uses built-in HTTP
-    features, standard response codes, authentication and verbs, allowing for
-    quick implementation with standard HTTP packages used in all languages. The
-    API accepts requests with a JSON body and returns JSON responses.
-  version: "1.0"
-  contact:
-    name: Dev
-    email: dev@pavelon.com
-servers:
-  - url: http://sandbox.pavelon.com
-    description: Dev
-  - url: http://sandbox.pavelon.com
-    description: Staging
-security:
-  - x-api-key: []
-  - x-api-version: []
-tags:
-  - name: Auth
-  - name: Enhanced KYC
-  - name: Domain Verification
-  - name: Credit Application
-  - name: Savings Application
-  - name: Credits Product
-  - name: Savings Product
-  - name: Customers
-  - name: Account Transactions
-  - name: Identity Verification
-  - name: ID Verification
-  - name: ID Upload + Selfie Upload
-  - name: Liveness Check
-  - name: Digital Address Verification
-  - name: Lenders
-  - name: Disbursement API
-  - name: Self Service
-  - name: Application Integration
-paths:
-  /api/auth/login:
-    post:
-      tags:
-        - Auth
-      description: Authenticate
-      operationId: Authenticate
-      summary: Authenticate
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Auth"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/user/otp/send:
-    post:
-      tags:
-        - Enhanced KYC
-      operationId: Send OTP
-      description: Send OTP to Mobile
-      summary: Send OTP to Mobile
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OTPRequest"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/user/otp/verify:
-    post:
-      tags:
-        - Enhanced KYC
-      operationId: Verify OTP
-      description: Verify OTP
-      summary: Verify OTP
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VerifyOTP"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/user/verify/id:
-    post:
-      tags:
-        - Identity Verification
-      operationId: ID Verification
-      description: ID Verification
-      summary: ID Verification
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VerifyID"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/domain/verify:
-    post:
-      tags:
-        - Domain Verification
-      operationId: Domain Verify
-      description: Domain Verify
-      summary: Domain Verify
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VerifyDomainUser"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/creditproduct:
-    get:
-      tags:
-        - Credits Product
-      operationId: Get Credits Products
-      description: Get Credits Products
-      summary: List Credits Product
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreditProductResponse"
-  "/api/creditproduct/{productId}":
-    get:
-      tags:
-        - Credits Product
-      operationId: Get Credits Product
-      description: Get Credits Product
-      summary: Get Credits Product
-      parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreditProductResponse"
-  /api/savingsproduct:
-    get:
-      tags:
-        - Savings Product
-      operationId: Get Savings Products
-      description: Get Savings Products
-      summary: List Savings Product
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SavingsProductResponse"
-  "/api/savingsproduct/{productId}":
-    get:
-      tags:
-        - Savings Product
-      operationId: Get Savings Product
-      description: Get Savings Product
-      summary: Get Savings Product
-      parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SavingsProductResponse"
-  /api/customers:
-    post:
-      tags:
-        - Customers
-      operationId: Create Customer
-      description: Create Customer
-      summary: Create Customer
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Client"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Client"
-    get:
-      tags:
-        - Customers
-      operationId: Retrieve All Customers
-      description: Retrieve All Customers
-      summary: Retrieve All Customers
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Client"
-  "/api/customers/{clientId}":
-    get:
-      tags:
-        - Customers
-      operationId: Get Customer
-      description: Retrieve Customer
-      summary: Retrieve Customer
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-  "/api/customers/{clientId}address":
-    post:
-      tags:
-        - Customers
-      operationId: Create Customer Address
-      description: Create Customer Address
-      summary: Create Customer Address
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/CustomerAddress"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerAddress"
-    get:
-      tags:
-        - Customers
-      operationId: List Customer Addresses
-      description: Get Customer Addresses
-      summary: Get Customer Addresses
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerAddress"
-  "/api/customers/{clientId}/accounts":
-    get:
-      tags:
-        - Customers
-      operationId: Get Customer Accounts
-      description: Get Customer Accounts
-      summary: Get Customer Accounts
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-  "/api/customers/{clientId}/transactions":
-    get:
-      tags:
-        - Customers
-      operationId: Get Customer Transactions
-      description: Get Customer Transactions
-      summary: Get Customer Transactions
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-  /api/savings:
-    post:
-      tags:
-        - Savings Application
-      description: Create Savings Application
-      summary: Create Savings Application
-      operationId: Create Savings Application
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Loan"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-    get:
-      tags:
-        - Savings Application
-      summary: Get Savings Applications
-      operationId: Get Savings Applications
-      description: Get Savings Applications
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  "/api/savings/{savingsId}":
-    get:
-      tags:
-        - Savings Application
-      summary: Get Savings Application
-      operationId: Get Savings Application
-      description: Get Savings Application
-      parameters:
-        - name: savingsId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-    post:
-      tags:
-        - Savings Application
-      summary: Approve / Reject Credit
-      description: Approve or Reject Credit (action = approve/reject)
-      operationId: Approve or Reject Savings
-      parameters:
-        - name: savingsId
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ActionLoanRequest"
-      responses:
-        "200":
-          description: Success Desciption
-  /api/credit:
-    post:
-      tags:
-        - Credit Application
-      description: Create Credit Application
-      summary: Create Credit Application
-      operationId: Create Credit Application
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Loan"
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-    get:
-      tags:
-        - Credit Application
-      summary: Get Credit Applications
-      operationId: Get Credit Applications
-      description: Get Credit Applications
-      responses:
-        "200":
-          description: Description
-          content:
-            application/json:
-              schema:
-                type: string
-  "/api/credit/{creditId}":
-    get:
-      tags:
-        - Credit Application
-      summary: Get Credit Application
-      operationId: Get Credit Application
-      description: Get Credit Application
-      parameters:
-        - name: creditId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-  "/api/credit/{creditId}/details":
-    get:
-      tags:
-        - Credit Application
-      summary: Get Credit Details
-      operationId: Get Credit Details
-      description: Get Credit Details
-      parameters:
-        - name: creditId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Description
-    post:
-      tags:
-        - Credit Application
-      summary: Approve / Reject Credit
-      description: Approve or Reject Credit (action = approve/reject)
-      operationId: Approve or Reject Credit
-      parameters:
-        - name: creditId
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ActionLoanRequest"
-      responses:
-        "200":
-          description: Success Desciption
-  "/api/credit/{loanId}/disburse":
-    post:
-      tags:
-        - Credit
-      summary: Disburse Credit
-      operationId: Disburse Credit
-      description: Disburse Credit
-      parameters:
-        - name: loanId
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DisburseRequest"
-      responses:
-        "200":
-          description: Response
-  /api/domains:
-    get:
-      tags:
-        - Self Service
-      summary: List Organization / Domain
-      operationId: List Organization / Domain
-      description: List Organization / Domain
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DomainResponse"
-  /api/self/onboarding:
-    post:
-      tags:
-        - Self Service
-      summary: Onboarding
-      operationId: Onboarding
-      description: Onboarding
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserRegister"
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: object
-  /api/self/creditproducts:
-    get:
-      tags:
-        - Self Service
-      summary: List Credit Products
-      operationId: List Credit Products
-      description: List Credit Products
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreditProduct"
-  "/api/self/creditproducts/{productId}":
-    get:
-      tags:
-        - Self Service
-      summary: Product Details
-      operationId: Product Details
-      description: Product Details
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreditProduct"
-  /api/self/credit:
-    post:
-      tags:
-        - Self Service
-      summary: Apply for Credit Product
-      operationId: Apply for Credit Product
-      description: Apply for Credit Product
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AccountInfoResponse"
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: object
-    get:
-      tags:
-        - Self Service
-      summary: List Application Account
-      operationId: List Application Account
-      description: List Application Account
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: object
-  "/api/self/credit/{creditId}":
-    get:
-      tags:
-        - Self Service
-      summary: Account Details
-      operationId: Account Details
-      description: Account Details
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-        - name: creditId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccountInfoResponse"
-  "/api/self/savings/{accountId}":
-    get:
-      tags:
-        - Self Service
-      summary: Saving Account Info
-      operationId: Saving Account Info
-      description: Saving Account Info
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-        - name: accountId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccountInfoResponse"
-  "/api/self/transfer/{transactionId}":
-    get:
-      tags:
-        - Self Service
-      summary: Transaction Transfer Info
-      operationId: Transaction Transfer Info
-      description: Transaction Transfer Infos
-      parameters:
-        - name: userId
-          in: header
-          required: true
-          schema:
-            type: integer
-        - name: transactionId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccountInfoResponse"
-components:
-  schemas:
-    Client:
-      type: object
-      properties:
-        fullname:
-          type: string
-        email:
-          type: string
-        mobileNo:
-          type: string
-          maximum: 10
-        type:
-          type: string
-    ClientResponse:
-      type: object
-      properties:
-        fullname:
-          type: string
-        mobileNo:
-          type: string
-    Auth:
-      type: object
-      properties:
-        email:
-          type: string
-          example: testdomain@pavelon.com
-        password:
-          type: string
-          example: "123456"
-    AuthResponse:
-      type: object
-    VerifyID:
-      type: object
-      properties:
-        country:
-          type: string
-          example: gh
-        type:
-          type: string
-          example: voter
-        full_name:
-          type: string
-        id:
-          type: string
-          example: 2000100000
-        is_new_id:
-          type: boolean
-          example: false
-    VerifyIDResponse:
-      type: object
-    OTPRequest:
-      type: object
-      properties:
-        mobile:
-          type: string
-    OTPResponse:
-      type: object
-    VerifyOTP:
-      type: object
-      properties:
-        mobile:
-          type: string
-        code:
-          type: string
-    VerfiyOTPResponse:
-      type: object
-    DomainResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-    CreditProduct:
-      type: object
-      properties:
-        productId:
-          type: integer
-        productName:
-          type: string
-        productType:
-          type: integer
-        domainName:
-          type: string
-        domainId:
-          type: string
-    CreditProductRequest:
-      type: object
-      properties:
-        productId:
-          type: integer
-        amount:
-          type: string
-        mandatePin:
-          type: string
-        mandateNumber:
-          type: string
-    ActionLoanRequest:
-      type: object
-      properties:
-        note:
-          type: string
-        action:
-          type: string
-    ActionLoanResponse:
-      type: object
-    DisburseRequest:
-      type: object
-      properties:
-        transactionAmount:
-          type: string
-        fixedEmiAmount:
-          type: string
-        actualDisbursementDate:
-          type: string
-        paymentTypeId:
-          type: string
-        note:
-          type: string
-        accountNumber:
-          type: string
-        checkNumber:
-          type: string
-        routingCode:
-          type: string
-        receiptNumber:
-          type: string
-        bankNumber:
-          type: string
-    DisburseResponse:
-      type: object
-    CreditProductResponse:
-      type: object
-    SavingsProductResponse:
-      type: object
-    AccountInfoResponse:
-      type: object
-    VerifyDomainUser:
-      type: object
-      properties:
-        origin:
-          type: string
-          example: pavelon
-        mode:
-          type: string
-          example: validate
-        type:
-          type: string
-          example: identity
-        id:
-          type: string
-    VerfiyDomainResponse:
-      type: object
-    Loan:
-      type: object
-      properties:
-        dateFormat:
-          type: string
-        locale:
-          type: string
-        clientId:
-          type: string
-        productId:
-          type: string
-        principal:
-          type: string
-        loanTermFrequency:
-          type: string
-        loanTermFrequencyType:
-          type: string
-        loanType:
-          type: string
-        numberOfRepayments:
-          type: string
-        repaymentEvery:
-          type: string
-        repaymentFrequencyType:
-          type: string
-        interestRatePerPeriod:
-          type: string
-        amortizationType:
-          type: string
-        interestType:
-          type: string
-        interestCalculationPeriodType:
-          type: string
-        transactionProcessingStrategyId:
-          type: string
-        expectedDisbursementDate:
-          type: string
-        submittedOnDate:
-          type: string
-        linkAccountId:
-          type: string
-        loanPurposeId:
-          type: string
-        maxOutstandingLoanBalance:
-          type: string
-        daysInYearType:
-          type: string
-    LoanResponse:
-      type: object
-    CustomerAddress:
-      type: object
-      properties:
-        addressTypeId:
-          type: string
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        addressLine3:
-          type: string
-        city:
-          type: string
-        postalCode:
-          type: string
-    UserRegister:
-      type: object
-      properties:
-        firstname:
-          type: string
-        lastname:
-          type: string
-        organization_id:
-          type: string
-        selfieUrl:
-          type: string
-        idCardUrl:
-          type: string
-        mobileNo:
-          type: string
-        verified_id_name:
-          type: string
-        verified_id_value:
-          type: string
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
-    securityRequirement:
-      type: object
-  securitySchemes:
-    x-api-key:
-      type: apiKey
-      name: x-api-key
-      in: header
-    x-api-version:
-      type: apiKey
-      name: x-api-version
-      in: header
-    xbs-token:
-      type: apiKey
-      name: xbs-token
-      in: header
-    basicAuth:
-      type: http
-      scheme: basic
-    jwtAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Pavelon",
+    "description": "Pavelon's API is organized around REST and uses built-in HTTP features, standard response codes, authentication and verbs, allowing for quick implementation with standard HTTP packages used in all languages. The API accepts requests with a JSON body and returns JSON responses.",
+    "version": "1.0",
+    "contact": {
+      "name": "Dev",
+      "email": "dev@pavelon.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://sandbox.pavelon.com",
+      "description": "Dev"
+    },
+    {
+      "url": "http://sandbox.pavelon.com",
+      "description": "Staging"
+    }
+  ],
+  "security": [
+    {
+      "x-api-key": []
+    },
+    {
+      "x-api-version": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Enhanced KYC"
+    },
+    {
+      "name": "Domain Verification"
+    },
+    {
+      "name": "Credit Application"
+    },
+    {
+      "name": "Savings Application"
+    },
+    {
+      "name": "Credits Product"
+    },
+    {
+      "name": "Savings Product"
+    },
+    {
+      "name": "Customers"
+    },
+    {
+      "name": "Account Transactions"
+    },
+    {
+      "name": "Identity Verification"
+    },
+    {
+      "name": "ID Verification"
+    },
+    {
+      "name": "ID Upload + Selfie Upload"
+    },
+    {
+      "name": "Liveness Check"
+    },
+    {
+      "name": "Digital Address Verification"
+    },
+    {
+      "name": "Lenders"
+    },
+    {
+      "name": "Disbursement API"
+    },
+    {
+      "name": "Self Service"
+    },
+    {
+      "name": "Application Integration"
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authenticate",
+        "operationId": "Authenticate",
+        "summary": "Authenticate",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Auth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/otp/send": {
+      "post": {
+        "tags": [
+          "Enhanced KYC"
+        ],
+        "operationId": "Send OTP",
+        "description": "Send OTP to Mobile",
+        "summary": "Send OTP to Mobile",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OTPRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/otp/verify": {
+      "post": {
+        "tags": [
+          "Enhanced KYC"
+        ],
+        "operationId": "Verify OTP",
+        "description": "Verify OTP",
+        "summary": "Verify OTP",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOTP"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/verify/id": {
+      "post": {
+        "tags": [
+          "Identity Verification"
+        ],
+        "operationId": "ID Verification",
+        "description": "ID Verification",
+        "summary": "ID Verification",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/domain/verify": {
+      "post": {
+        "tags": [
+          "Domain Verification"
+        ],
+        "operationId": "Domain Verify",
+        "description": "Domain Verify",
+        "summary": "Domain Verify",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyDomainUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/creditproduct": {
+      "get": {
+        "tags": [
+          "Credits Product"
+        ],
+        "operationId": "Get Credits Products",
+        "description": "Get Credits Products",
+        "summary": "List Credits Product",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/creditproduct/{productId}": {
+      "get": {
+        "tags": [
+          "Credits Product"
+        ],
+        "operationId": "Get Credits Product",
+        "description": "Get Credits Product",
+        "summary": "Get Credits Product",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/savingsproduct": {
+      "get": {
+        "tags": [
+          "Savings Product"
+        ],
+        "operationId": "Get Savings Products",
+        "description": "Get Savings Products",
+        "summary": "List Savings Product",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingsProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/savingsproduct/{productId}": {
+      "get": {
+        "tags": [
+          "Savings Product"
+        ],
+        "operationId": "Get Savings Product",
+        "description": "Get Savings Product",
+        "summary": "Get Savings Product",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingsProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customers": {
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Create Customer",
+        "description": "Create Customer",
+        "summary": "Create Customer",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Retrieve All Customers",
+        "description": "Retrieve All Customers",
+        "summary": "Retrieve All Customers",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customers/{clientId}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Get Customer",
+        "description": "Retrieve Customer",
+        "summary": "Retrieve Customer",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/customers/{clientId}address": {
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Create Customer Address",
+        "description": "Create Customer Address",
+        "summary": "Create Customer Address",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CustomerAddress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerAddress"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "List Customer Addresses",
+        "description": "Get Customer Addresses",
+        "summary": "Get Customer Addresses",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerAddress"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customers/{clientId}/accounts": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Get Customer Accounts",
+        "description": "Get Customer Accounts",
+        "summary": "Get Customer Accounts",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/customers/{clientId}/transactions": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "operationId": "Get Customer Transactions",
+        "description": "Get Customer Transactions",
+        "summary": "Get Customer Transactions",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/savings": {
+      "post": {
+        "tags": [
+          "Savings Application"
+        ],
+        "description": "Create Savings Application",
+        "summary": "Create Savings Application",
+        "operationId": "Create Savings Application",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Loan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Savings Application"
+        ],
+        "summary": "Get Savings Applications",
+        "operationId": "Get Savings Applications",
+        "description": "Get Savings Applications",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/savings/{savingsId}": {
+      "get": {
+        "tags": [
+          "Savings Application"
+        ],
+        "summary": "Get Savings Application",
+        "operationId": "Get Savings Application",
+        "description": "Get Savings Application",
+        "parameters": [
+          {
+            "name": "savingsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Savings Application"
+        ],
+        "summary": "Approve / Reject Credit",
+        "description": "Approve or Reject Credit (action = approve/reject)",
+        "operationId": "Approve or Reject Savings",
+        "parameters": [
+          {
+            "name": "savingsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionLoanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Desciption"
+          }
+        }
+      }
+    },
+    "/api/credit": {
+      "post": {
+        "tags": [
+          "Credit Application"
+        ],
+        "description": "Create Credit Application",
+        "summary": "Create Credit Application",
+        "operationId": "Create Credit Application",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Loan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Credit Application"
+        ],
+        "summary": "Get Credit Applications",
+        "operationId": "Get Credit Applications",
+        "description": "Get Credit Applications",
+        "responses": {
+          "200": {
+            "description": "Description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/credit/{creditId}": {
+      "get": {
+        "tags": [
+          "Credit Application"
+        ],
+        "summary": "Get Credit Application",
+        "operationId": "Get Credit Application",
+        "description": "Get Credit Application",
+        "parameters": [
+          {
+            "name": "creditId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      }
+    },
+    "/api/credit/{creditId}/details": {
+      "get": {
+        "tags": [
+          "Credit Application"
+        ],
+        "summary": "Get Credit Details",
+        "operationId": "Get Credit Details",
+        "description": "Get Credit Details",
+        "parameters": [
+          {
+            "name": "creditId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Credit Application"
+        ],
+        "summary": "Approve / Reject Credit",
+        "description": "Approve or Reject Credit (action = approve/reject)",
+        "operationId": "Approve or Reject Credit",
+        "parameters": [
+          {
+            "name": "creditId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionLoanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Desciption"
+          }
+        }
+      }
+    },
+    "/api/credit/{loanId}/disburse": {
+      "post": {
+        "tags": [
+          "Credit"
+        ],
+        "summary": "Disburse Credit",
+        "operationId": "Disburse Credit",
+        "description": "Disburse Credit",
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisburseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response"
+          }
+        }
+      }
+    },
+    "/api/domains": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "List Organization / Domain",
+        "operationId": "List Organization / Domain",
+        "description": "List Organization / Domain",
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/onboarding": {
+      "post": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Onboarding",
+        "operationId": "Onboarding",
+        "description": "Onboarding",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/creditproducts": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "List Credit Products",
+        "operationId": "List Credit Products",
+        "description": "List Credit Products",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/creditproducts/{productId}": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Product Details",
+        "operationId": "Product Details",
+        "description": "Product Details",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditProduct"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/credit": {
+      "post": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Apply for Credit Product",
+        "operationId": "Apply for Credit Product",
+        "description": "Apply for Credit Product",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountInfoResponse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "List Application Account",
+        "operationId": "List Application Account",
+        "description": "List Application Account",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/credit/{creditId}": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Account Details",
+        "operationId": "Account Details",
+        "description": "Account Details",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "creditId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/savings/{accountId}": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Saving Account Info",
+        "operationId": "Saving Account Info",
+        "description": "Saving Account Info",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/self/transfer/{transactionId}": {
+      "get": {
+        "tags": [
+          "Self Service"
+        ],
+        "summary": "Transaction Transfer Info",
+        "operationId": "Transaction Transfer Info",
+        "description": "Transaction Transfer Infos",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Client": {
+        "type": "object",
+        "properties": {
+          "fullname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string",
+            "maximum": 10
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientResponse": {
+        "type": "object",
+        "properties": {
+          "fullname": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          }
+        }
+      },
+      "Auth": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "testdomain@pavelon.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object"
+      },
+      "VerifyID": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string",
+            "example": "gh"
+          },
+          "type": {
+            "type": "string",
+            "example": "voter"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "example": 2000100000
+          },
+          "is_new_id": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "VerifyIDResponse": {
+        "type": "object"
+      },
+      "OTPRequest": {
+        "type": "object",
+        "properties": {
+          "mobile": {
+            "type": "string"
+          }
+        }
+      },
+      "OTPResponse": {
+        "type": "object"
+      },
+      "VerifyOTP": {
+        "type": "object",
+        "properties": {
+          "mobile": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "VerfiyOTPResponse": {
+        "type": "object"
+      },
+      "DomainResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CreditProduct": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productType": {
+            "type": "integer"
+          },
+          "domainName": {
+            "type": "string"
+          },
+          "domainId": {
+            "type": "string"
+          }
+        }
+      },
+      "CreditProductRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "mandatePin": {
+            "type": "string"
+          },
+          "mandateNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "ActionLoanRequest": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        }
+      },
+      "ActionLoanResponse": {
+        "type": "object"
+      },
+      "DisburseRequest": {
+        "type": "object",
+        "properties": {
+          "transactionAmount": {
+            "type": "string"
+          },
+          "fixedEmiAmount": {
+            "type": "string"
+          },
+          "actualDisbursementDate": {
+            "type": "string"
+          },
+          "paymentTypeId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "accountNumber": {
+            "type": "string"
+          },
+          "checkNumber": {
+            "type": "string"
+          },
+          "routingCode": {
+            "type": "string"
+          },
+          "receiptNumber": {
+            "type": "string"
+          },
+          "bankNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "DisburseResponse": {
+        "type": "object"
+      },
+      "CreditProductResponse": {
+        "type": "object"
+      },
+      "SavingsProductResponse": {
+        "type": "object"
+      },
+      "AccountInfoResponse": {
+        "type": "object"
+      },
+      "VerifyDomainUser": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string",
+            "example": "pavelon"
+          },
+          "mode": {
+            "type": "string",
+            "example": "validate"
+          },
+          "type": {
+            "type": "string",
+            "example": "identity"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "VerfiyDomainResponse": {
+        "type": "object"
+      },
+      "Loan": {
+        "type": "object",
+        "properties": {
+          "dateFormat": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "principal": {
+            "type": "string"
+          },
+          "loanTermFrequency": {
+            "type": "string"
+          },
+          "loanTermFrequencyType": {
+            "type": "string"
+          },
+          "loanType": {
+            "type": "string"
+          },
+          "numberOfRepayments": {
+            "type": "string"
+          },
+          "repaymentEvery": {
+            "type": "string"
+          },
+          "repaymentFrequencyType": {
+            "type": "string"
+          },
+          "interestRatePerPeriod": {
+            "type": "string"
+          },
+          "amortizationType": {
+            "type": "string"
+          },
+          "interestType": {
+            "type": "string"
+          },
+          "interestCalculationPeriodType": {
+            "type": "string"
+          },
+          "transactionProcessingStrategyId": {
+            "type": "string"
+          },
+          "expectedDisbursementDate": {
+            "type": "string"
+          },
+          "submittedOnDate": {
+            "type": "string"
+          },
+          "linkAccountId": {
+            "type": "string"
+          },
+          "loanPurposeId": {
+            "type": "string"
+          },
+          "maxOutstandingLoanBalance": {
+            "type": "string"
+          },
+          "daysInYearType": {
+            "type": "string"
+          }
+        }
+      },
+      "LoanResponse": {
+        "type": "object"
+      },
+      "CustomerAddress": {
+        "type": "object",
+        "properties": {
+          "addressTypeId": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "addressLine3": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRegister": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "selfieUrl": {
+            "type": "string"
+          },
+          "idCardUrl": {
+            "type": "string"
+          },
+          "mobileNo": {
+            "type": "string"
+          },
+          "verified_id_name": {
+            "type": "string"
+          },
+          "verified_id_value": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "securityRequirement": {
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "x-api-key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      },
+      "x-api-version": {
+        "type": "apiKey",
+        "name": "x-api-version",
+        "in": "header"
+      },
+      "xbs-token": {
+        "type": "apiKey",
+        "name": "xbs-token",
+        "in": "header"
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "jwtAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
